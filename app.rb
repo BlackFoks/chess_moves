@@ -9,10 +9,12 @@ class ChessPiece
   attr_reader :pad
   attr_reader :type
   
+  # current cell
   def cell
     @pad[*@pos]
   end
 
+  # can we move to this cell?
   def can_move?(i, j)
     return false unless @pad
     if @type == :knight
@@ -23,10 +25,11 @@ class ChessPiece
     end
   end
   
+  # gets all cells in which we can move
   def can_move
     cells = []
     @pad.cells.each do |c|
-      i, j = [c.pos[0] - @pos[0], c.pos[1] - @pos[1]]
+      i, j = [c.pos[0] - @pos[0], c.pos[1] - @pos[1]] # get relative pos
       cells << c if can_move?(i, j)
       # puts diff_pos.to_s
     end
@@ -34,6 +37,7 @@ class ChessPiece
     #@pad.cells.select{ |c| can_move?(c.pos[0] - @pos[0], c.pos[1] - @pos[1]) }
   end
   
+  # moves into given cell
   def move(i, j)
     cell = @pad[i, j]
     if can_move?(i, j) && cell
@@ -43,9 +47,11 @@ class ChessPiece
 
 end
 
+# A "map"
 class PhonePad
   def initialize
     @pad = {}
+    # parse block
     yield.each_with_index do |row, j|
       row.each_with_index do |cell, i|
         @pad[[i,j]] = PadCell.new cell, :for => self 
@@ -53,23 +59,28 @@ class PhonePad
     end
   end
 
+  # gets a cell
   def [](i, j)
     @pad[[i,j]]
   end
   
+  # gets pos of a cell
   def pos_of(cell)
     @pad.key(cell)
   end
   
+  # gets pos of a cell with specified value
   def pos_of_value(cell_value)
     pos_of(cells.select{ |c| c.value == cell_value }.first)
   end
   
+  # gets all cells
   def cells
     @pad.values
   end
 end
 
+# Cell pa a map
 class PadCell
   def initialize(value, options = {})
     @value = value
@@ -84,6 +95,7 @@ class PadCell
   end
 end
 
+# Node in a graph
 class Node
   attr_accessor :parent
   
@@ -103,6 +115,7 @@ class Node
     @children.each(block)
   end
   
+  # gets path (aka "phone number")
   def path
     if @parent
       @parent.path + @val.to_s
@@ -112,6 +125,7 @@ class Node
   end  
 end
 
+# Finds desired path
 class PathFinder
   def initialize(pad, chess_piece)
     @pad = pad
@@ -122,9 +136,10 @@ class PathFinder
     find(@chess_piece, @root)
   end
   
+  # finds a paths
   def find(chess_piece, root)
-    if root.path.length >= 3
-      @paths << root.path
+    if root.path.gsub(/[^\d]/, '').length >= 10
+      @paths << root.path.gsub(/[^\d]/, '')
       return
     end
     
@@ -158,13 +173,13 @@ class PathFinder
     #cells = chess_piece.can_move
   end
   
-  def find_childs(chess_piece, root)
-    cells = chess_piece.can_move
-    cells.each do |cell|
-      node = Node.new cell.value
-      root << node
-    end
-  end
+  # def find_childs(chess_piece, root)
+  #   cells = chess_piece.can_move
+  #   cells.each do |cell|
+  #     node = Node.new cell.value
+  #     root << node
+  #   end
+  # end
   
   attr_reader :paths
   
@@ -188,9 +203,13 @@ knight = ChessPiece.new :knight, :pad => phone_pad, :at => 7
 
 pf = PathFinder.new phone_pad, knight
 
+uniq_paths = []
 pf.paths.each do |p|
   puts p
 end
+
+puts "Total: #{pf.paths.count}"
+puts "Uniq: #{pf.paths.uniq.count}"
 
 # puts knight.pos.to_s
 # puts knight.cell.pos.to_s
