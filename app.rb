@@ -199,17 +199,17 @@ end
 # puts phone_pad.pos_of_value(1).to_s
 # puts phone_pad.pos_of(phone_pad.cells.first).to_s
 
-knight = ChessPiece.new :knight, :pad => phone_pad, :at => 7
+knight = ChessPiece.new :knight, :pad => phone_pad, :at => 9
 
 pf = PathFinder.new phone_pad, knight
 
-uniq_paths = []
-pf.paths.each do |p|
+uniq_paths = pf.paths.uniq.sort
+uniq_paths.each do |p|
   puts p
 end
 
 puts "Total: #{pf.paths.count}"
-puts "Uniq: #{pf.paths.uniq.count}"
+puts "Uniq: #{uniq_paths.count}"
 
 # puts knight.pos.to_s
 # puts knight.cell.pos.to_s
@@ -231,6 +231,9 @@ puts "Uniq: #{pf.paths.uniq.count}"
 # puts n27.path
 
 # knight.can_move.each { |c| puts c }
+
+puts "===================== Testing ==========="
+puts true if uniq_paths.include?("9572943816")
 
 
 #queen = ChessPiece.new :queen, :at => phone_pad
