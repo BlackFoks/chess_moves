@@ -1,5 +1,9 @@
 require "spec_helper"
 
 describe ChessMoves do
-  its(:rules) { should_not be_nil }
+  let(:rules) { ChessMoves::Rules }
+
+  it "have rules" do
+    rules.should_not be_nil
+  end
 end
