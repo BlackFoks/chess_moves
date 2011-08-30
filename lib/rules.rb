@@ -11,9 +11,15 @@ module ChessMoves
     end  
     
     def self.valid_move?(type, options={})
+      
       rule = @@rules[type]
       now = options[:from]
       new = options[:to]
+      
+      if new == [0, 3] || new == [2, 3]
+        return false
+      end
+      
       rule.call(now, new)
     end
   end

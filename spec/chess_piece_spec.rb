@@ -41,11 +41,11 @@ describe ChessMoves::ChessPiece do
     valid_moves = rook.valid_moves
     valid_values = valid_moves.map { |cell| cell.value }
 
-    [1, 4, 7, 8, 9, '*'].each do |v|
+    [1, 4, 7, 8, 9].each do |v|
       valid_values.include?(v).should be_true
     end
 
-    valid_values.length.should == 6
+    valid_values.length.should == 5
   end
 
   it "can move" do
@@ -60,8 +60,8 @@ describe ChessMoves::ChessPiece do
     white_rook.pos.should == [2, 0]
 
     valid_values = white_rook.valid_moves.map { |cell| cell.value }
-    valid_values.length.should == 6
-    [1, 2, 3, 6, 9, '#'].each do |v|
+    valid_values.length.should == 5
+    [1, 2, 3, 6, 9].each do |v|
       valid_values.include?(v).should be_true
     end
   end
