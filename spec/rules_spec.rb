@@ -27,4 +27,12 @@ describe ChessMoves::Rules do
     rules[:rook].call([1, 1], [0, 2]).should be_false
   end
 
+  it "validates moves" do
+    rules.add :rook, rook_rule
+
+    rules.valid_move?(:rook, :from => [2, 1], :to => [0, 1]).should be_true
+    rules.valid_move?(:rook, :from => [2, 1], :to => [2, 3]).should be_true
+    rules.valid_move?(:rook, :from => [2, 1], :to => [0, 2]).should be_false
+  end
+
 end
