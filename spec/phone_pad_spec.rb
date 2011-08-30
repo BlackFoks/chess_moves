@@ -13,6 +13,8 @@ describe ChessMoves::PhonePad do
   it { should_not be_nil }
   its(:cells) { should_not be_nil }
   its(:cells) { should_not be_empty }
+  its(:width) { should == 3 }
+  its(:height) { should == 4 }
   
   it "should have 12 cells" do
     subject.cells.length.should == 12

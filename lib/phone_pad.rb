@@ -6,7 +6,7 @@ module ChessMoves
       # parse block
       yield.each_with_index do |row, j|
         row.each_with_index do |cell, i|
-          @pad[[i,j]] = PadCell.new cell, :for => self 
+          @pad[[i,j]] = PadCell.new cell, :for => self
         end
       end
     end
@@ -29,6 +29,14 @@ module ChessMoves
     # gets all cells
     def cells
       @pad.values
+    end
+
+    def width
+      @width ||= @pad.keys.map{ |k| k.x }.max + 1
+    end
+
+    def height
+      @height ||= @pad.keys.map{ |k| k.y }.max + 1
     end
   end
 end
