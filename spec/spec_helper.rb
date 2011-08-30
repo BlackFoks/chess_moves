@@ -9,3 +9,7 @@ def default_pad
      ['*', 0, '#']]
  end
 end
+
+def get_rook_rule_proc
+  Proc.new { |now, new| (now[0] == new[0]) || (now[1] == new[1]) }
+end

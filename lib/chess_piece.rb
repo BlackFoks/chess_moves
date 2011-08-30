@@ -13,5 +13,21 @@ module ChessMoves
       @pad[*@pos]
     end
 
+    # can we move to this cell?
+    def can_move?(i, j)
+      ChessMoves::Rules.valid_move? @type, :from => @pos, :to => [i, j]
+    end
+
+    def valid_moves
+      @pad.cells.select { |c| self.can_move?(*c.pos) }
+    end
+
+    def move(i, j)
+      if self.can_move?(i, j) && @pad[i, j]
+        @pos = [i, j]
+        #TODO: add type changing for a pawn
+      end
+    end
+
   end
 end
