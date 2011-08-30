@@ -18,7 +18,6 @@ module ChessMoves
   autoload :ChessPiece, 'chess_piece.rb'
   autoload :PadCell, 'pad_cell.rb'
   autoload :PhonePad, 'phone_pad.rb'
-  # autoload :Node, 'node.rb'
   autoload :PathFinder, 'path_finder.rb'
 
   def self.pos_diff(start, target)
