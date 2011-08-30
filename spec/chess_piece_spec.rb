@@ -12,7 +12,7 @@ describe ChessMoves::ChessPiece do
   end
   
   it "have pad" do
-    queen = ChessMoves::ChessPiece.new :queen, :pad => "FakePad"
+    queen = ChessMoves::ChessPiece.new :queen, :pad => ChessMoves::PhonePad.new { [[1]] }
     queen.pad.should_not be_nil
   end
 end

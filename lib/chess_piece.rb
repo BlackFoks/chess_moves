@@ -5,7 +5,7 @@ module ChessMoves
     def initialize(type, options = {})
       @type = type
       @pad = options[:pad]
-      # @pos = @pad.pos_of_value(options[:at])
+      @pos = @pad.pos_of_value(options[:at]) if @pad
     end
   end
 end
