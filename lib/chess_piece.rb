@@ -1,6 +1,10 @@
 module ChessMoves
   class ChessPiece
     attr_accessor :type, :pad, :pos
+    @@moves_like = {}
+    def self.moves_like
+      @@moves_like
+    end
 
     def initialize(type, options = {})
       @type = type
@@ -15,7 +19,12 @@ module ChessMoves
 
     # can we move to this cell?
     def can_move?(i, j)
-      ChessMoves::Rules.valid_move? @type, :from => @pos, :to => [i, j]
+      flag = false
+      @@moves_like[type].each do |rule|
+        flag |= ChessMoves::Rules.valid_move?(rule, :from => @pos, :to => [i, j])
+      end
+      flag
+      #ChessMoves::Rules.valid_move? @type, :from => @pos, :to => [i, j]
     end
 
     def valid_moves
