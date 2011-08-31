@@ -1,57 +1,23 @@
 module ChessMoves
   class PathFinder
-    def initialize(pad, chess_piece, options={})
-      # set objs
+    attr_reader :counter
+
+    def initialize(pad)
       @pad = pad
-      @chess_piece = chess_piece
-
-      # debug info
-      @debug = options[:debug] || false
-      @counter = 0
-
-      # phones
-      @node_phones = {}
-      @node_phones_size = 0
-
-      # prepare cache
-      @valid_next = {}
-      @valid_next[chess_piece.type] = {}
-      pos = chess_piece.pos # save current pos
-      @pad.cells.each do |cell|
-        chess_piece.pos = cell.pos # fake move
-        # save valid move for cell and piece type
-        @valid_next[chess_piece.type][cell.pos] = chess_piece.valid_moves.map { |c| c.pos }
-      end
-      chess_piece.pos = pos # restore pos
-
-      # find...
-      find(@chess_piece, chess_piece.cell.value.to_s)
     end
 
-    def phones
-      @phones ||= @node_phones.keys.select { |k| k.length == ChessMoves::PhoneLength }
+    def search(opts={})
+      @chess_piece = ChessMoves::ChessPiece.new opts[:for], :pad => @pad, :at => opts[:at]
+      @phone_length = opts[:length] || 10
+
+      # TODO: also we should pass transforms and clear the cache
+      fill_cache(@chess_piece.type)
+
+      @counter = 0
+      find(@chess_piece, @chess_piece.cell.value.to_s)
     end
 
     def find(piece, parent_phone)
-      # count
-      @counter += 1 if @debug
-
-      # skip if processed
-      return if @node_phones[parent_phone]
-
-      # mark as processed
-      @node_phones[parent_phone] = true
-      @node_phones_size += 1
-
-      # debug
-      if @debug && @counter % 500 == 0
-        @counter -= 500
-        puts "#{@node_phones_size} ------ #{parent_phone}"
-      end
-
-      # if have nessesary length
-      return if parent_phone.length >= ChessMoves::PhoneLength
-
       # remember current pos
       pos = @chess_piece.pos
       # get valid cells for current position
@@ -60,8 +26,13 @@ module ChessMoves
       valid_cells.each do |cell|
         # get new phone
         new_phone = parent_phone + cell.value.to_s
-        # check it
-        next if @node_phones[new_phone]
+
+        # if have nessesary length
+        if new_phone.length >= @phone_length
+          puts new_phone
+          @counter += 1
+          next
+        end
 
         # move piece
         @chess_piece.move(*cell.pos)
@@ -71,6 +42,25 @@ module ChessMoves
         @chess_piece.pos = pos
       end
     end
+
+    private
+
+      def fill_cache(*args)
+        # main cache object
+        @valid_next = {}
+        args.each do |piece_type|
+          # cache for type
+          @valid_next[piece_type] = {}
+          # create temp chess piece
+          piece = ChessMoves::ChessPiece.new piece_type, :pad => @pad, :at => 1
+          # process...
+          @pad.cells.each do |cell|
+            piece.pos = cell.pos # fake move
+            # save valid move for cell and piece type
+            @valid_next[piece_type][cell.pos] = piece.valid_moves.map { |c| c.pos }
+          end
+        end
+      end
 
   end
 end

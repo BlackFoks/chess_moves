@@ -28,7 +28,7 @@ end
 
 # load default rules
 
-ChessMoves::Rules.add :rook, Proc.new { |curr, new| (now.x == new.x) || (now.y == new.y) }
+ChessMoves::Rules.add :rook, Proc.new { |now, new| (now.x == new.x) || (now.y == new.y) }
 
 ChessMoves::Rules.add :knight, Proc.new { |now, new|
   i, j = ChessMoves.pos_diff(now, new).map { |v| v.abs }
@@ -39,7 +39,14 @@ ChessMoves::Rules.add :bishop, Proc.new { |now, new|
   i, j = ChessMoves.pos_diff(now, new)
   i.abs == j.abs
 }
+
 ChessMoves::Rules.add :king, Proc.new { |now, new|
   i, j = ChessMoves.pos_diff(now, new)
   [0, 1].include?(i.abs) && [0, 1].include?(j.abs)
+}
+
+ChessMoves::Rules.add :queen, Proc.new { |now, new| 
+  i, j = ChessMoves.pos_diff(now, new).map { |v| v.abs }
+  ((now.x == new.x) || (now.y == new.y)) ||
+  (i == j) || ([0, 1].include?(i) && [0, 1].include?(j))
 }
