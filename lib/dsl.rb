@@ -1,5 +1,11 @@
 @dsl_define = :rules
 
+def transforms_to(type, &block)
+  if @current_piece
+    ChessMoves::Transformations.add @current_piece, type, block
+  end
+end
+
 def moves_like(*args)
   if @current_piece
     ChessMoves::ChessPiece.moves_like[@current_piece] ||= []

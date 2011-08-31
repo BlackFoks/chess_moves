@@ -21,6 +21,7 @@ module ChessMoves
   autoload :PadCell, 'pad_cell.rb'
   autoload :PhonePad, 'phone_pad.rb'
   autoload :PathFinder, 'path_finder.rb'
+  autoload :Transformations, 'transformations.rb'
 
   def self.pos_diff(start, target)
     [start.x - target.x, start.y - target.y]

@@ -40,8 +40,19 @@ module ChessMoves
       if self.can_move?(i, j) && @pad[i, j]
         @pos = [i, j]
         @first_move = false
-        #TODO: add type changing for a pawn
+        # type changing
+        trans_to = ChessMoves::Transformations.transforms_to(@type, :pos => self.pos)
+        @type = trans_to if trans_to
       end
+    end
+
+    def types
+      trans2 = ChessMoves::Transformations[@type]
+      if trans2
+        trans2_to = trans2.first
+        return [@type, trans2_to]
+      end
+      [@type]
     end
 
   end

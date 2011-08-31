@@ -11,8 +11,8 @@ module ChessMoves
       @phone_length = opts[:length] || 10
 
       # TODO: also we should pass transforms and clear the cache
-      fill_cache(@chess_piece.type)
-      fill_first_cache(@chess_piece.type)
+      fill_cache(*@chess_piece.types)
+      fill_first_cache(*@chess_piece.types)
 
       @counter = 0
       find(@chess_piece, @chess_piece.cell.value.to_s, &block)
@@ -22,6 +22,7 @@ module ChessMoves
       # remember current state
       pos = @chess_piece.pos
       first_move = @chess_piece.first_move?
+      curr_type = @chess_piece.type
       # get valid cells for current position
       valid_cache = first_move ? @first_valid_next[piece.type] : @valid_next[piece.type]
       valid_cells = valid_cache[pos].map { |ps| @pad[*ps] }
@@ -32,7 +33,6 @@ module ChessMoves
 
         # if have nessesary length
         if new_phone.length >= @phone_length
-          # puts new_phone
           yield new_phone if block_given?
           @counter += 1
           next
@@ -45,6 +45,7 @@ module ChessMoves
         # restore piece state
         @chess_piece.pos = pos
         @chess_piece.first_move = first_move
+        @chess_piece.type = curr_type
       end
     end
 
