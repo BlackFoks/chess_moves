@@ -13,3 +13,7 @@ end
 def get_rook_rule_proc
   Proc.new { |now, new| (now[0] == new[0]) || (now[1] == new[1]) }
 end
+
+def get_knight_rule_proc
+  Proc.new { |now, new| (now[0] == new[0]) || (now[1] == new[1]) }
+end

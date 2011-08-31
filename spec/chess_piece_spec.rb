@@ -5,6 +5,11 @@ describe ChessMoves::ChessPiece do
   let(:queen) { ChessMoves::ChessPiece.new :queen, :pad => default_pad, :at => 4 }
   let(:rook) { ChessMoves::ChessPiece.new :rook, :pad => default_pad, :at => 7 }
 
+  before do
+    rules { define :rook, &get_rook_rule_proc }
+    pieces { define :rook }
+  end
+
   it "can be knight" do
     knight.should_not be_nil
   end
@@ -27,8 +32,6 @@ describe ChessMoves::ChessPiece do
   end
 
   it "should validate move" do
-    ChessMoves::Rules.add :rook, get_rook_rule_proc
-
     rook.can_move?(0, 0).should be_true
     rook.can_move?(2, 2).should be_true
     rook.can_move?(2, 0).should be_false
@@ -36,8 +39,6 @@ describe ChessMoves::ChessPiece do
   end
 
   it "should provide valid moves" do
-    ChessMoves::Rules.add :rook, get_rook_rule_proc
-
     valid_moves = rook.valid_moves
     valid_values = valid_moves.map { |cell| cell.value }
 
@@ -49,7 +50,6 @@ describe ChessMoves::ChessPiece do
   end
 
   it "can move" do
-    ChessMoves::Rules.add :rook, get_rook_rule_proc
     white_rook = ChessMoves::ChessPiece.new :rook, :pad => default_pad, :at => 8
 
     white_rook.move(0, 2)
