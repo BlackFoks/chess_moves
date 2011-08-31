@@ -21,9 +21,13 @@ rules do
     [0, 1].include?(i) && [0, 1].include?(j)
   end
   
-  define :pawn do |start, target|
+  define :pawn do |start, target, is_first|
     i, j = start / target # no abs diff
-    (i == 0 && j == 0) || (i == 0) && (j == 1)
+    if is_first && start.y >= 2
+      (i == 0 && j == 0) || (i == 0) && (j == 1) || (i == 0) && (j == 2)
+    else
+      (i == 0 && j == 0) || (i == 0) && (j == 1)
+    end
   end
 end
 

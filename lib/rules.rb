@@ -15,12 +15,13 @@ module ChessMoves
       rule = @@rules[type]
       now = options[:from]
       new = options[:to]
+      is_first = options[:is_first] || false
       
       if new == [0, 3] || new == [2, 3]
         return false
       end
       
-      rule.call(now, new)
+      rule.call(now, new, is_first)
     end
   end
 end
