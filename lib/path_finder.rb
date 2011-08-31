@@ -6,7 +6,7 @@ module ChessMoves
       @pad = pad
     end
 
-    def search(opts={})
+    def search(opts={}, &block)
       @chess_piece = ChessMoves::ChessPiece.new opts[:for], :pad => @pad, :at => opts[:at]
       @phone_length = opts[:length] || 10
 
@@ -14,10 +14,10 @@ module ChessMoves
       fill_cache(@chess_piece.type)
 
       @counter = 0
-      find(@chess_piece, @chess_piece.cell.value.to_s)
+      find(@chess_piece, @chess_piece.cell.value.to_s, &block)
     end
 
-    def find(piece, parent_phone)
+    def find(piece, parent_phone, &block)
       # remember current pos
       pos = @chess_piece.pos
       # get valid cells for current position
@@ -29,7 +29,8 @@ module ChessMoves
 
         # if have nessesary length
         if new_phone.length >= @phone_length
-          puts new_phone
+          # puts new_phone
+          yield new_phone if block_given?
           @counter += 1
           next
         end
@@ -37,7 +38,7 @@ module ChessMoves
         # move piece
         @chess_piece.move(*cell.pos)
         # find...
-        find(@chess_piece, new_phone)
+        find(@chess_piece, new_phone, &block)
         # restore piece pos
         @chess_piece.pos = pos
       end

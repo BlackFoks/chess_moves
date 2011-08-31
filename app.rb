@@ -23,7 +23,9 @@ piece_pos = ARGV[1].to_i
 max_length = (ARGV[2] || 10).to_i
 
 # search
-finder.search :for => piece_type, :at => piece_pos, :length => max_length
+finder.search :for => piece_type, :at => piece_pos, :length => max_length do |phone|
+  puts phone
+end
 
 # puts info
 puts "======================================"
