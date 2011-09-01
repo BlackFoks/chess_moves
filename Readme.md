@@ -165,7 +165,7 @@ Using the app
 
 Just run it in terminal:
 
-    $ ruby app.rb chess_piese_type> <starting_value> [phone_length]
+    $ ruby app.rb <chess_piese_type> <starting_value> [phone_length]
 
 
 Author
