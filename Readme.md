@@ -45,31 +45,36 @@ end
 ```
 You also can define a rule which can determine whether this step is first or don't:
 
-    define :pawn do |start, target, is_first|
-      i, j = start / target # it's just like Array#% but w/o #abs
-      max_j = is_first && start.y >= 2 ? 2 : 1
+```ruby
+define :pawn do |start, target, is_first|
+  i, j = start / target # it's just like Array#% but w/o #abs
+  max_j = is_first && start.y >= 2 ? 2 : 1
 
-      i == 0 && j >= 0 && j <= max_j
-    end
-    
+  i == 0 && j >= 0 && j <= max_j
+end
+```
 Now you have a few rules so you can define some chess pieces:
 
-    pieces do
-      define :rook do
-        moves_like :rook
-      end
-      
-      #...
-    end
+```ruby
+pieces do
+  define :rook do
+    moves_like :rook
+  end
+  
+  #...
+end
+```
     
 As you can see we've defined a rook that moves like a rook (very unexpectedly, right? :).
 That's why there is a simpler way to define pieces which move like themselves:
 
-    # define single piece
-    define :rook
-    
-    #define multiple pieces at once
-    define :knight, :bishop, :king
+```ruby
+# define single piece
+define :rook
+
+#define multiple pieces at once
+define :knight, :bishop, :king
+```
     
 Ok, that's good, but what `#moves_like` really does? It just links a piece with an appropriate 
 rule so this piece can move on only those cells which satisfy the rule.
@@ -78,17 +83,21 @@ Moreover you can define a piece that moves like multiple pieces (or, in other wo
 multiple rules). That makes creating such pieces like queen very simple and fun (also it's
 DRY):
 
-    define :queen do
-      moves_like :rook, :bishop, :king
-    end
+```ruby
+define :queen do
+  moves_like :rook, :bishop, :king
+end
+```
     
 There is another thing with defining rules we did not discuss. It's transformations.
 Let's look at code:
 
-    define :pawn do
-      moves_like :pawn
-      transforms_to(:queen) { |pos| pos.y == 0 }
-    end
+```ruby
+define :pawn do
+  moves_like :pawn
+  transforms_to(:queen) { |pos| pos.y == 0 }
+end
+````
     
 First, note that now we should explicitly define how the chess piece moves.
 Second, look how we use `#transforms_to`. We pass a name of a chess piece to it and use 
