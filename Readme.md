@@ -23,24 +23,26 @@ and so on).
 
 All of this stages are very simple with DSL:
 
-Define rules:
+### Defining rules
 
-    # lets define some rules
-    rules do
-      define :rook do |start, target|
-        # rook can move on cells with the same 'x' or 'y'
-        start.x == target.x || start.y == target.y
-      end
-      
-      define :bishop do |start, target|
-        # Array#% works like [(a1.x - a2.x).abs, (a1.y - a2.y).abs]
-        i, j = start % target
-        i == j
-      end
+Lets define some rules:
 
-      #...
-    end
+```ruby
+rules do
+  define :rook do |start, target|
+    # rook can move on cells with the same 'x' or 'y'
+    start.x == target.x || start.y == target.y
+  end
+  
+  define :bishop do |start, target|
+    # Array#% works like [(a1.x - a2.x).abs, (a1.y - a2.y).abs]
+    i, j = start % target
+    i == j
+  end
 
+  #...
+end
+```
 You also can define a rule which can determine whether this step is first or don't:
 
     define :pawn do |start, target, is_first|
