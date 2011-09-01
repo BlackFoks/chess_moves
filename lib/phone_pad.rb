@@ -1,12 +1,16 @@
 module ChessMoves
   # A "map"
   class PhonePad
-    def initialize
+    def initialize(opts=nil)
       @pad = {}
+      @width = opts[:width]
+      @height = opts[:height]
       # parse block
-      yield.each_with_index do |row, j|
-        row.each_with_index do |cell, i|
-          @pad[[i,j]] = PadCell.new cell, :for => self
+      if block_given?
+        yield.each_with_index do |row, j|
+          row.each_with_index do |value, i|
+            @pad[[i,j]] = PadCell.new value, :for => self
+          end
         end
       end
     end

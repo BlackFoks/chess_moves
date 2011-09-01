@@ -1,5 +1,11 @@
 @dsl_define = :rules
 
+def cant_move(*args)
+  opts = args.last
+  pad = opts[:on]
+  args.map{ |v| pad.pos_of_value v }.each { |pos| ChessMoves::Rules.impassable << pos }
+end
+
 def transforms_to(type, &block)
   if @current_piece
     ChessMoves::Transformations.add @current_piece, type, block
