@@ -25,7 +25,7 @@ All of this stages are very simple with DSL:
 
 ### Defining rules
 
-Lets define some rules:
+Let's define some rules:
 
 ```ruby
 rules do
@@ -159,6 +159,14 @@ phones.
 to do something useful.
 
 Also `finder#counter` provides number of found phones.
+
+Using the app
+-------------
+
+Just run it in terminal:
+
+    $ ruby app.rb chess_piese_type> <starting_value> [phone_length]
+
 
 Author
 ------
