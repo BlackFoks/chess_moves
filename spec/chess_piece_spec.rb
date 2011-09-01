@@ -8,6 +8,7 @@ describe ChessMoves::ChessPiece do
   before do
     rules { define :rook, &get_rook_rule_proc }
     pieces { define :rook }
+    cant_move '*', '#', :on => default_pad
   end
 
   it "can be knight" do
@@ -16,6 +17,18 @@ describe ChessMoves::ChessPiece do
 
   it "have type" do
     knight.type == :knight
+  end
+
+  it "have types" do
+    pieces { define :pawn do
+        moves_like :rook
+        transforms_to(:queen) { |pos| pos.y == 0 }
+    end }
+
+    pawn = ChessMoves::ChessPiece.new :pawn, :pad => default_pad, :at => 0
+
+    knight.types.should include(:knight)
+    pawn.types.should include(:pawn, :queen)
   end
 
   it "have pad" do

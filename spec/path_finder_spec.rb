@@ -11,7 +11,7 @@ describe ChessMoves::PathFinder do
 
     @pad = default_pad
     @knight = ChessMoves::ChessPiece.new :knight, :pad => @pad, :at => 4
-    @finder = ChessMoves::PathFinder.new @pad #, @knight
+    @finder = ChessMoves::PathFinder.new @pad
   end
 
   it "should find a phones for knight" do

@@ -1,14 +1,7 @@
 require 'spec_helper'
 
 describe ChessMoves::PhonePad do  
-  subject do
-    ChessMoves::PhonePad.new do
-      [[ 1,  2,  3 ],
-       [ 4,  5,  6 ],
-       [ 7,  8,  9 ],
-       ['*', 0, '#']]
-    end
-  end
+  subject { default_pad.clone }
   
   it { should_not be_nil }
   its(:cells) { should_not be_nil }
