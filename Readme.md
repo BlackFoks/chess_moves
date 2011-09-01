@@ -167,6 +167,10 @@ Just run it in terminal:
 
     $ ruby app.rb <chess_piese_type> <starting_value> [phone_length]
 
+As an example:
+
+    $ ruby app.rb knight 7
+
 
 Author
 ------
