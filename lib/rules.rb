@@ -13,15 +13,15 @@ module ChessMoves
 
     def self.valid_move?(type, options={})
       rule = @@rules[type]
-      now = options[:from]
-      new = options[:to]
+      start = options[:from]
+      target = options[:to]
       is_first = options[:is_first] || false
 
-      if @@impassable.include?(new)
+      if @@impassable.include?(target)
         return false
       end
 
-      rule.call(now, new, is_first)
+      rule.call(start, target, is_first)
     end
 
     def self.impassable

@@ -1,14 +1,16 @@
 #!/usr/bin/env ruby -wKU
 require './lib/chess_moves'
 
-# define rules
+# Using DSL
+
+# define moving rules
 rules do
   define :rook do |start, target|
     start.x == target.x || start.y == target.y
   end
 
   define :knight do |start, target|
-    i, j = start % target # abs diff
+    i, j = start % target # it's (start-target).abs
     (i == 0 && j == 0) || (i == 1 && j == 2) || (i == 2 && j == 1)
   end
 
@@ -19,16 +21,14 @@ rules do
 
   define :king do |start, target|
     i, j = start % target
-    [0, 1].include?(i) && [0, 1].include?(j)
+    i <= 1 && j <= 1
   end
 
   define :pawn do |start, target, is_first|
-    i, j = start / target # no abs diff
-    if is_first && start.y >= 2
-      (i == 0 && j == 0) || (i == 0) && (j == 1) || (i == 0) && (j == 2)
-    else
-      (i == 0 && j == 0) || (i == 0) && (j == 1)
-    end
+    i, j = start / target # it's just start - target
+    max_j = is_first && start.y >= 2 ? 2 : 1
+    
+    i == 0 && j >= 0 && j <= max_j
   end
 end
 
@@ -46,8 +46,6 @@ pieces do
   end
 end
 
-# exit
-
 # create a pad
 phone_pad = ChessMoves::PhonePad.new do
    [[ 1,  2,  3 ],
@@ -56,7 +54,10 @@ phone_pad = ChessMoves::PhonePad.new do
     ['*', 0, '#']]
 end
 
+# define inpassable values
 cant_move '*', '#', :on => phone_pad
+
+# App logic
 
 # create a finder
 finder = ChessMoves::PathFinder.new phone_pad
@@ -73,7 +74,9 @@ finder.search :for => piece_type, :at => piece_pos, :length => max_length do |ph
   puts phone
 end
 
+elapsed_time = Time.now - start_time
+
 # puts info
 puts "======================================"
-puts "#{finder.counter} phones found in #{Time.now - start_time} sec."
+puts "#{finder.counter} phones found in #{elapsed_time} sec."
 puts "======================================"

@@ -10,7 +10,6 @@ module ChessMoves
       @chess_piece = ChessMoves::ChessPiece.new opts[:for], :pad => @pad, :at => opts[:at]
       @phone_length = opts[:length] || 10
 
-      # TODO: also we should pass transforms and clear the cache
       fill_cache(*@chess_piece.types)
       fill_first_cache(*@chess_piece.types)
 
@@ -23,6 +22,7 @@ module ChessMoves
       pos = @chess_piece.pos
       first_move = @chess_piece.first_move?
       curr_type = @chess_piece.type
+
       # get valid cells for current position
       valid_cache = first_move ? @first_valid_next[piece.type] : @valid_next[piece.type]
       valid_cells = valid_cache[pos].map { |ps| @pad[*ps] }
@@ -42,6 +42,7 @@ module ChessMoves
         @chess_piece.move(*cell.pos)
         # find...
         find(@chess_piece, new_phone, &block)
+
         # restore piece state
         @chess_piece.pos = pos
         @chess_piece.first_move = first_move

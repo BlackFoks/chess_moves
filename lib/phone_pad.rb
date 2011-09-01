@@ -1,7 +1,7 @@
 module ChessMoves
   # A "map"
   class PhonePad
-    def initialize(opts=nil)
+    def initialize(opts={})
       @pad = {}
       @width = opts[:width]
       @height = opts[:height]
