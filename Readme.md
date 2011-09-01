@@ -53,6 +53,9 @@ define :pawn do |start, target, is_first|
   i == 0 && j >= 0 && j <= max_j
 end
 ```
+
+### Defining chess pieces
+
 Now you have a few rules so you can define some chess pieces:
 
 ```ruby
@@ -89,7 +92,7 @@ define :queen do
 end
 ```
     
-There is another thing with defining rules we did not discuss. It's transformations.
+There is another one thing with defining rules we did not discuss. It's transformations.
 Let's look at code:
 
 ```ruby
@@ -103,3 +106,61 @@ First, note that now we should explicitly define how the chess piece moves.
 Second, look how we use `#transforms_to`. We pass a name of a chess piece to it and use 
 a block to define a condition for the transformation. In our case transformation will be 
 happen when pawn stops at a cell from a first row.
+
+### Defining a pad
+
+A way you can define pads is very simple and visual. Let's define a phone pad:
+
+```ruby
+phone_pad = ChessMoves::PhonePad.new do
+   [[ 1,  2,  3 ],
+    [ 4,  5,  6 ],
+    [ 7,  8,  9 ],
+    ['*', 0, '#']]
+end
+```
+
+That's all, the pad is defined and your chess pieces can move upon it and can stop at any
+cell. But what about if you don't want to allow them to move through some cell?
+
+### Defining impassable cells
+
+In order to disallow chess pieces to move through some cells ban this cell by its value:
+
+```ruby
+cant_move '*', '#', :on => phone_pad
+```
+
+Also you need to specify which pad is used.
+
+### Searching
+
+Now you have all things needed to search some phones. So let's do it!
+
+Define a finder for a particular pad:
+
+```ruby
+finder = ChessMoves::PathFinder.new phone_pad
+```
+
+And start searching:
+
+```ruby
+finder.search :for => :knight, :at => 4, :length => 10 do |phone|
+  puts phone
+end
+```
+
+Let's talk about above code. `:for` specifies which chess piece we want to use, `:at` is 
+a starting cell of the chess piece. `:length` is optional and specifies length of valid 
+phones.
+
+`finder#search` does not do anything with found phones so you can pass a block in order 
+to do something useful.
+
+Also `finder#counter` provides number of found phones.
+
+Author
+------
+
+George Bragin (aka blackfoks)
